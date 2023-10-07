@@ -3,4 +3,27 @@ project(multithread-lab)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(cli cli.cpp)
+
+add_library(
+        thread_manager INTERFACE
+)
+
+add_library(
+        file_manager INTERFACE
+)
+
+target_include_directories(thread_manager INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+target_include_directories(file_manager INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+add_subdirectory(third-party/PicoSHA2-master)
+
+add_executable(cli cli/cli.cpp)
+target_link_libraries(cli thread_manager)
+target_link_libraries(cli file_manager)
