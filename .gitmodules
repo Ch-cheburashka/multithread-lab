@@ -1,0 +1,3 @@
+[submodule "third-party/picosha"]
+	path = third-party/picosha
+	url = git@github.com:okdshin/PicoSHA2.git

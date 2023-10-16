@@ -7,14 +7,18 @@ class file_manager {
 public:
     explicit file_manager(const std::string& file) {
         if (!_file.is_open())
-            _file.open(file);
+            _file.open(file, std::ios::app);
     }
     ~file_manager() {
         _file.close();
     }
-    std::ofstream& get_file() {
-        return _file;
+    friend file_manager& operator<<(file_manager& file, const std::vector<std::string>& vector){
+        for (auto& hash : vector) {
+            file._file << hash << "\n";
+        }
+        return file;
     }
+
 private:
     std::ofstream _file;
 };

@@ -4,22 +4,23 @@
 #include <queue>
 #include <string>
 #include <mutex>
+#include <vector>
 
 class thread_safe_queue {
 public:
     void push(const std::string& value) {
         std::lock_guard<std::mutex> lock(_mutex);
-        _queue.push(value);
+        _queue.emplace_back(value);
     }
-    void pop() {
+
+    std::vector<std::string> dump () {
         std::lock_guard<std::mutex> lock(_mutex);
-        _queue.pop();
-    }
-    std::queue<std::string>& get_queue () {
-        return _queue;
+        std::vector<std::string> hashes{_queue.begin(), _queue.end()};
+        _queue.clear();
+        return hashes;
     }
 private:
-    std::queue<std::string> _queue;
+    std::vector<std::string> _queue;
     std::mutex _mutex;
 };
 
