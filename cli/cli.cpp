@@ -18,6 +18,8 @@ void signal_handler(int) {
 
 void generate_source() {
     for (;;) {
+        if (flag == 1)
+            return;
         std::string source;
         std::random_device dev;
         std::mt19937 rng(dev());
@@ -38,11 +40,13 @@ std::string create_hash(const std::string &source) {
 }
 
 bool check_if_valid(const std::string &hash) {
-    return hash.substr(hash.length() - 4, hash.length()) == "0000";
+    return hash.substr(hash.length() - 1, hash.length()) == "0";
 }
 
 void gather_hashes() {
     for (;;) {
+        if (flag == 1)
+            return;
         std::string source = origin_string_queue::get_instance()->pop();
         std::string hash = create_hash(source);
         if (check_if_valid(hash)) {
@@ -55,6 +59,8 @@ void gather_hashes() {
 
 void write_in_file(std::string file_path) {
     for (;;) {
+        if (flag == 1)
+            return;
         std::this_thread::sleep_for(std::chrono::seconds(3));
         file_manager file(file_path);
         file << hashed_string_queue::get_instance()->dump();
@@ -66,14 +72,12 @@ int main(int argc, char **argv) {
     signal(SIGINT, signal_handler);
     // extract file_path from argv
 
-    // ==========================
     size_t M;
     if (argc == 3) {
-        M = std::stoi(argv[2]) - 1;
+        M = std::stoi(argv[2]);
     } else {
-        M = std::thread::hardware_concurrency() - 1;
+        M = std::thread::hardware_concurrency();
     }
-
     std::string file_path = argv[1];
 
     ThreadPool thread_pool(M);

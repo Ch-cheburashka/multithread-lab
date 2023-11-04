@@ -25,7 +25,7 @@ public:
 
     std::string pop() {
         std::unique_lock<std::mutex> lock(_mutex);
-        std::string result;
+        std::string result = _queue.front();
         _condition.wait(lock, [this]{
             return !this->_queue.empty();
         });
