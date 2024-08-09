@@ -1,4 +1,4 @@
-#include "../third-party/PicoSHA2-master/picosha2.h"
+#include "picosha2.h"
 #include <string>
 #include <random>
 #include <csignal>

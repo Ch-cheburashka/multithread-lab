@@ -31,7 +31,11 @@ target_include_directories(thread_safe_queue INTERFACE
         $<INSTALL_INTERFACE:include>
 )
 
-add_subdirectory(third-party/PicoSHA2-master)
+# Add PicoSHA2
+add_subdirectory(external/PicoSHA2)
+
+# Include the directory where PicoSHA2 is located
+include_directories(external/PicoSHA2)
 
 add_executable(cli cli/cli.cpp)
 target_link_libraries(cli thread_manager)
